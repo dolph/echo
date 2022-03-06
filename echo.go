@@ -7,14 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func getParams(c *gin.Context) map[string]string {
-	params := make(map[string]string)
-	for _, param := range c.Params {
-		params[param.Key] = param.Value
-	}
-	return params
-}
-
 func getEnv() map[string]string {
 	env := make(map[string]string)
 	for _, e := range os.Environ() {
@@ -78,19 +70,18 @@ func getOS() map[string]interface{} {
 	}
 }
 
-func index(c *gin.Context) {
-
-	c.IndentedJSON(200, gin.H{
-		"OS":      getOS(),
-		"Request": getRequest(c),
-		"Env":     getEnv(),
-		"Params":  getParams(c),
-	})
-}
-
 func main() {
 	gin.SetMode(gin.ReleaseMode)
+
+	// Respond to all requests using the same func.
 	r := gin.Default()
-	r.NoRoute(index)
+	r.NoRoute(func(c *gin.Context) {
+		c.IndentedJSON(200, gin.H{
+			"OS":      getOS(),
+			"Request": getRequest(c),
+			"Env":     getEnv(),
+		})
+	})
+
 	r.Run()
 }
