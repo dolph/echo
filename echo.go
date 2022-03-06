@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"os"
 	"strings"
 
@@ -74,8 +75,8 @@ func main() {
 	gin.SetMode(gin.ReleaseMode)
 
 	// Respond to all requests using the same func.
-	r := gin.Default()
-	r.NoRoute(func(c *gin.Context) {
+	router := gin.Default()
+	router.NoRoute(func(c *gin.Context) {
 		c.IndentedJSON(200, gin.H{
 			"OS":      getOS(),
 			"Request": getRequest(c),
@@ -83,5 +84,8 @@ func main() {
 		})
 	})
 
-	r.Run()
+	err := router.Run()
+	if err != nil {
+		log.Fatalf("Error running router: %v", err)
+	}
 }
