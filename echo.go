@@ -71,9 +71,7 @@ func getOS() map[string]interface{} {
 	}
 }
 
-func main() {
-	gin.SetMode(gin.ReleaseMode)
-
+func setupRouter() *gin.Engine {
 	// Respond to all requests using the same func.
 	router := gin.Default()
 	router.NoRoute(func(c *gin.Context) {
@@ -83,7 +81,12 @@ func main() {
 			"Env":     getEnv(),
 		})
 	})
+	return router
+}
 
+func main() {
+	gin.SetMode(gin.ReleaseMode)
+	router := setupRouter()
 	err := router.Run()
 	if err != nil {
 		log.Fatalf("Error running router: %v", err)
