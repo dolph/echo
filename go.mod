@@ -2,7 +2,7 @@ module github.com/dolph/echo
 
 go 1.24.0
 
-toolchain go1.24.7
+toolchain go1.27.2
 
 require github.com/gin-gonic/gin v1.10.1
 
